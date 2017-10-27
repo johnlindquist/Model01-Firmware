@@ -243,7 +243,7 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState)
     return MACRODOWN(D(LeftAlt), T(Spacebar), U(LeftAlt));
     break;
 
-  case MACRO_ALT_SPACEBAR:
+  case MACRO_CONTROL_SPACEBAR:
     return MACRODOWN(D(LeftControl), T(Spacebar), U(LeftControl));
     break;
 
