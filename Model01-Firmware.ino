@@ -139,7 +139,7 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
                                    ShiftToLayer(FUNCTION), Key_A, Key_R, Key_S, Key_T, Key_D,
                                    Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, M(MACRO_CONTROL_SPACEBAR),
                                    Key_LeftAlt, Key_LeftControl, Key_Spacebar, GUI_T(Escape),
-                                   ShiftToLayer(FUNCTION),
+                                   ShiftToLayer(SYMBOLS),
 
                                    M(MACRO_ANY), Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
                                    Key_Enter, Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
