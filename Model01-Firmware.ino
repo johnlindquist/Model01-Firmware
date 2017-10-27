@@ -70,10 +70,15 @@
 enum
 {
   MACRO_VERSION_INFO,
-  MACRO_ANY
+  MACRO_ANY,
+  MACRO_LEFT_PAREN,
+  MACRO_RIGHT_PAREN,
+  MACRO_GREATER_THAN,
+  MACRO_ALT_SPACEBAR,
+  MACRO_CONTROL_SPACEBAR,
 };
 
-/** The Model 01's key layouts are defined as 'keymaps'. By default, there are three
+/** The Model 01's key layouts are def)ined as 'keymaps'. By default, there are three
   * keymaps: The standard QWERTY keymap, the "Function layer" keymap and the "Numpad"
   * keymap.
   *
@@ -130,30 +135,30 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
 
         [COLEMAK] = KEYMAP_STACKED(___, Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDEffectNext,
                                    Key_Backtick, Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Tab,
-                                   Key_PageUp, Key_A, Key_R, Key_S, Key_T, Key_D,
-                                   Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Escape,
-                                   Key_LeftControl, Key_LeftAlt, Key_Spacebar, GUI_T(Tab),
+                                   ShiftToLayer(FUNCTION), Key_A, Key_R, Key_S, Key_T, Key_D,
+                                   Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, M(MACRO_CONTROL_SPACEBAR),
+                                   Key_LeftControl, Key_LeftAlt, Key_Spacebar, GUI_T(Escape),
                                    ShiftToLayer(FUNCTION),
 
                                    M(MACRO_ANY), Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
                                    Key_Enter, Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
                                    Key_H, Key_N, Key_E, Key_I, Key_O, Key_Quote,
-                                   Key_RightAlt, Key_K, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Delete,
-                                   GUI_T(Escape), Key_RightShift, Key_Enter, Key_RightAlt,
+                                   M(MACRO_ALT_SPACEBAR), Key_K, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Delete,
+                                   GUI_T(Tab), Key_RightShift, Key_Enter, Key_RightAlt,
                                    ShiftToLayer(FUNCTION)),
 
         [FUNCTION] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, XXX,
                                     Key_Tab, ___, Key_mouseUp, ___, Key_mouseBtnR, Key_mouseWarpEnd, Key_mouseWarpNE,
-                                    Key_Home, Key_mouseL, Key_mouseDn, Key_mouseR, Key_mouseBtnL, Key_mouseWarpNW,
-                                    Key_End, Key_PrintScreen, Key_Insert, ___, Key_mouseBtnM, Key_mouseWarpSW, Key_mouseWarpSE,
-                                    Key_LeftControl, Key_LeftAlt, Key_Spacebar, GUI_T(Tab),
+                                    ___, Key_mouseBtnL, Key_LeftControl, Key_LeftShift, Key_LeftAlt, Key_mouseWarpNW,
+                                    Key_Backspace, Key_PrintScreen, Key_Insert, ___, Key_mouseBtnM, Key_mouseWarpSW, Key_mouseWarpSE,
+                                    Key_LeftControl, Key_LeftAlt, Key_Spacebar, GUI_T(Escape),
                                     ___,
 
                                     Consumer_ScanPreviousTrack, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11,
-                                    Consumer_PlaySlashPause, Consumer_ScanNextTrack, Key_LeftCurlyBracket, Key_RightCurlyBracket, Key_LeftBracket, Key_RightBracket, Key_F12,
+                                    Consumer_PlaySlashPause, Consumer_ScanNextTrack, M(MACRO_LEFT_PAREN), M(MACRO_RIGHT_PAREN), Key_Equals, M(MACRO_GREATER_THAN), Key_F12,
                                     Key_LeftArrow, Key_DownArrow, Key_UpArrow, Key_RightArrow, ___, ___,
-                                    Key_PcApplication, Key_Mute, Consumer_VolumeDecrement, Consumer_VolumeIncrement, ___, Key_Backslash, Key_Pipe,
-                                    GUI_T(Escape), Key_RightShift, Key_Enter, Key_RightAlt,
+                                    Key_PcApplication, Key_Mute, Consumer_VolumeDecrement, Consumer_VolumeIncrement, ___, Key_Backslash, Key_Delete,
+                                    GUI_T(Tab), Key_RightShift, Key_Enter, Key_RightAlt,
                                     ___),
 
         [NUMPAD] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
@@ -221,6 +226,26 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState)
 {
   switch (macroIndex)
   {
+  case MACRO_LEFT_PAREN:
+    return MACRODOWN(D(LeftShift), T(9), U(LeftShift));
+    break;
+
+  case MACRO_RIGHT_PAREN:
+    return MACRODOWN(D(LeftShift), T(0), U(LeftShift));
+
+    break;
+
+  case MACRO_GREATER_THAN:
+    return MACRODOWN(D(LeftShift), T(Period), U(LeftShift));
+    break;
+
+  case MACRO_ALT_SPACEBAR:
+    return MACRODOWN(D(LeftAlt), T(Spacebar), U(LeftAlt));
+    break;
+
+  case MACRO_ALT_SPACEBAR:
+    return MACRODOWN(D(LeftControl), T(Spacebar), U(LeftControl));
+    break;
 
   case MACRO_VERSION_INFO:
     versionInfoMacro(keyState);
@@ -271,6 +296,9 @@ void setup()
       // We start with the LED effect that turns off all the LEDs.
       // &LEDOff,
 
+      // The stalker effect lights up the keys you've pressed recently
+      &StalkerEffect,
+
       // The rainbow effect changes the color of all of the keyboard's keys at the same time
       // running through all the colors of the rainbow.
       &LEDRainbowEffect,
@@ -292,9 +320,6 @@ void setup()
       // The AlphaSquare effect prints each character you type, using your
       // keyboard's LEDs as a display
       &AlphaSquareEffect,
-
-      // The stalker effect lights up the keys you've pressed recently
-      // &StalkerEffect,
 
       // The numlock plugin is responsible for lighting up the 'numpad' mode
       // with a custom LED effect
