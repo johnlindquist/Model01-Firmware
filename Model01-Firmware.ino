@@ -13,7 +13,7 @@
 
 // The Kaleidoscope core
 #include "Kaleidoscope.h"
-
+#include "Kaleidoscope-DualUse.h"
 // Support for keys that move the mouse
 #include "Kaleidoscope-MouseKeys.h"
 
@@ -132,28 +132,28 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
                                    Key_Backtick, Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Tab,
                                    Key_PageUp, Key_A, Key_R, Key_S, Key_T, Key_D,
                                    Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Escape,
-                                   Key_LeftControl, Key_LeftAlt, Key_Spacebar, Key_LeftGui,
+                                   Key_LeftControl, Key_LeftAlt, Key_Spacebar, GUI_T(Tab),
                                    ShiftToLayer(FUNCTION),
 
                                    M(MACRO_ANY), Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
                                    Key_Enter, Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
                                    Key_H, Key_N, Key_E, Key_I, Key_O, Key_Quote,
                                    Key_RightAlt, Key_K, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Delete,
-                                   Key_RightGui, Key_RightShift, Key_Enter, Key_RightAlt,
+                                   GUI_T(Escape), Key_RightShift, Key_Enter, Key_RightAlt,
                                    ShiftToLayer(FUNCTION)),
 
         [FUNCTION] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, XXX,
                                     Key_Tab, ___, Key_mouseUp, ___, Key_mouseBtnR, Key_mouseWarpEnd, Key_mouseWarpNE,
                                     Key_Home, Key_mouseL, Key_mouseDn, Key_mouseR, Key_mouseBtnL, Key_mouseWarpNW,
                                     Key_End, Key_PrintScreen, Key_Insert, ___, Key_mouseBtnM, Key_mouseWarpSW, Key_mouseWarpSE,
-                                    ___, Key_Delete, ___, ___,
+                                    Key_LeftControl, Key_LeftAlt, Key_Spacebar, GUI_T(Tab),
                                     ___,
 
                                     Consumer_ScanPreviousTrack, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11,
                                     Consumer_PlaySlashPause, Consumer_ScanNextTrack, Key_LeftCurlyBracket, Key_RightCurlyBracket, Key_LeftBracket, Key_RightBracket, Key_F12,
                                     Key_LeftArrow, Key_DownArrow, Key_UpArrow, Key_RightArrow, ___, ___,
                                     Key_PcApplication, Key_Mute, Consumer_VolumeDecrement, Consumer_VolumeIncrement, ___, Key_Backslash, Key_Pipe,
-                                    ___, ___, Key_Enter, ___,
+                                    GUI_T(Escape), Key_RightShift, Key_Enter, Key_RightAlt,
                                     ___),
 
         [NUMPAD] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
@@ -252,6 +252,7 @@ static kaleidoscope::LEDSolidColor solidViolet(130, 0, 120);
 void setup()
 {
   // First, call Kaleidoscope's internal setup function
+  Kaleidoscope.use(&DualUse);
   Kaleidoscope.setup();
 
   // Next, tell Kaleidoscope which plugins you want to use.
@@ -268,7 +269,7 @@ void setup()
       &LEDControl,
 
       // We start with the LED effect that turns off all the LEDs.
-      &LEDOff,
+      // &LEDOff,
 
       // The rainbow effect changes the color of all of the keyboard's keys at the same time
       // running through all the colors of the rainbow.
@@ -283,17 +284,17 @@ void setup()
       &LEDChaseEffect,
 
       // These static effects turn your keyboard's LEDs a variety of colors
-      &solidRed, &solidOrange, &solidYellow, &solidGreen, &solidBlue, &solidIndigo, &solidViolet,
+      // &solidRed, &solidOrange, &solidYellow, &solidGreen, &solidBlue, &solidIndigo, &solidViolet,
 
       // The breathe effect slowly pulses all of the LEDs on your keyboard
-      &LEDBreatheEffect,
+      // &LEDBreatheEffect,
 
       // The AlphaSquare effect prints each character you type, using your
       // keyboard's LEDs as a display
       &AlphaSquareEffect,
 
       // The stalker effect lights up the keys you've pressed recently
-      &StalkerEffect,
+      // &StalkerEffect,
 
       // The numlock plugin is responsible for lighting up the 'numpad' mode
       // with a custom LED effect
