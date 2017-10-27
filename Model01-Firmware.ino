@@ -122,8 +122,9 @@ enum
 enum
 {
   COLEMAK,
+  SYMBOLS,
   FUNCTION,
-  NUMPAD
+  NUMPAD,
 }; // layers
 
 /* This comment temporarily turns off astyle's indent enforcement
@@ -133,11 +134,11 @@ enum
 
 const Key keymaps[][ROWS][COLS] PROGMEM = {
 
-        [COLEMAK] = KEYMAP_STACKED(___, Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDEffectNext,
-                                   Key_Backtick, Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Tab,
+        [COLEMAK] = KEYMAP_STACKED(Key_Backtick, Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDEffectNext,
+                                   ShiftToLayer(SYMBOLS), Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Tab,
                                    ShiftToLayer(FUNCTION), Key_A, Key_R, Key_S, Key_T, Key_D,
                                    Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, M(MACRO_CONTROL_SPACEBAR),
-                                   Key_LeftControl, Key_LeftAlt, Key_Spacebar, GUI_T(Escape),
+                                   Key_LeftAlt, Key_LeftControl, Key_Spacebar, GUI_T(Escape),
                                    ShiftToLayer(FUNCTION),
 
                                    M(MACRO_ANY), Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
@@ -147,11 +148,25 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
                                    GUI_T(Tab), Key_RightShift, Key_Enter, Key_RightAlt,
                                    ShiftToLayer(FUNCTION)),
 
+        [SYMBOLS] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, XXX,
+                                   ___, ___, Key_mouseUp, ___, Key_mouseBtnR, Key_mouseWarpEnd, Key_mouseWarpNE,
+                                   ___, Key_mouseBtnL, Key_LeftControl, Key_LeftShift, Key_LeftAlt, Key_mouseWarpNW,
+                                   Key_Backspace, Key_PrintScreen, Key_Insert, ___, Key_mouseBtnM, Key_mouseWarpSW, Key_mouseWarpSE,
+                                   Key_LeftAlt, Key_LeftControl, Key_Spacebar, GUI_T(Escape),
+                                   ___,
+
+                                   Consumer_ScanPreviousTrack, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11,
+                                   Consumer_PlaySlashPause, Consumer_ScanNextTrack, M(MACRO_LEFT_PAREN), M(MACRO_RIGHT_PAREN), Key_Equals, M(MACRO_GREATER_THAN), Key_F12,
+                                   Key_LeftArrow, Key_LeftCurlyBracket, Key_RightCurlyBracket, Key_LeftBracket, Key_RightBracket, ___,
+                                   Key_PcApplication, Key_Mute, Consumer_VolumeDecrement, Consumer_VolumeIncrement, ___, Key_Backslash, Key_Delete,
+                                   GUI_T(Tab), Key_RightShift, Key_Enter, Key_RightAlt,
+                                   ___),
+
         [FUNCTION] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, XXX,
                                     Key_Tab, ___, Key_mouseUp, ___, Key_mouseBtnR, Key_mouseWarpEnd, Key_mouseWarpNE,
                                     ___, Key_mouseBtnL, Key_LeftControl, Key_LeftShift, Key_LeftAlt, Key_mouseWarpNW,
                                     Key_Backspace, Key_PrintScreen, Key_Insert, ___, Key_mouseBtnM, Key_mouseWarpSW, Key_mouseWarpSE,
-                                    Key_LeftControl, Key_LeftAlt, Key_Spacebar, GUI_T(Escape),
+                                    Key_LeftAlt, Key_LeftControl, Key_Spacebar, GUI_T(Escape),
                                     ___,
 
                                     Consumer_ScanPreviousTrack, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11,
