@@ -76,6 +76,7 @@ enum
   MACRO_GREATER_THAN,
   MACRO_ALT_SPACEBAR,
   MACRO_CONTROL_SPACEBAR,
+  MACRO_ARROW_FUNCTION
 };
 
 /** The Model 01's key layouts are def)ined as 'keymaps'. By default, there are three
@@ -148,32 +149,32 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
                                    GUI_T(Tab), Key_RightShift, Key_Enter, Key_RightAlt,
                                    ShiftToLayer(FUNCTION)),
 
-        [SYMBOLS] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, XXX,
-                                   ___, ___, Key_mouseUp, ___, Key_mouseBtnR, Key_mouseWarpEnd, Key_mouseWarpNE,
-                                   ___, Key_mouseBtnL, Key_LeftControl, Key_LeftShift, Key_LeftAlt, Key_mouseWarpNW,
-                                   Key_Backspace, Key_PrintScreen, Key_Insert, ___, Key_mouseBtnM, Key_mouseWarpSW, Key_mouseWarpSE,
+        [SYMBOLS] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, ___,
+                                   ___, ___, ___, ___, ___, ___, ___,
+                                   ___, ___, ___, ___, Key_Backtick, ___,
+                                   Key_Backspace, ___, ___, ___, ___, ___, ___,
                                    Key_LeftAlt, Key_LeftControl, Key_Spacebar, GUI_T(Escape),
                                    ___,
 
-                                   Consumer_ScanPreviousTrack, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11,
-                                   Consumer_PlaySlashPause, Consumer_ScanNextTrack, M(MACRO_LEFT_PAREN), M(MACRO_RIGHT_PAREN), Key_Equals, M(MACRO_GREATER_THAN), Key_F12,
-                                   Key_LeftArrow, Key_LeftCurlyBracket, Key_RightCurlyBracket, Key_LeftBracket, Key_RightBracket, ___,
-                                   Key_PcApplication, Key_Mute, Consumer_VolumeDecrement, Consumer_VolumeIncrement, ___, Key_Backslash, Key_Delete,
+                                   ___, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11,
+                                   ___, M(MACRO_ARROW_FUNCTION), M(MACRO_LEFT_PAREN), M(MACRO_RIGHT_PAREN), Key_Equals, M(MACRO_GREATER_THAN), Key_F12,
+                                   ___, Key_LeftCurlyBracket, Key_RightCurlyBracket, Key_LeftBracket, Key_RightBracket, ___,
+                                   ___, ___, ___, ___, ___, ___, Key_Delete,
                                    GUI_T(Tab), Key_RightShift, Key_Enter, Key_RightAlt,
                                    ___),
 
-        [FUNCTION] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, XXX,
-                                    Key_Tab, ___, Key_mouseUp, ___, Key_mouseBtnR, Key_mouseWarpEnd, Key_mouseWarpNE,
-                                    ___, Key_mouseBtnL, Key_LeftControl, Key_LeftShift, Key_LeftAlt, Key_mouseWarpNW,
-                                    Key_Backspace, Key_PrintScreen, Key_Insert, ___, Key_mouseBtnM, Key_mouseWarpSW, Key_mouseWarpSE,
-                                    Key_LeftAlt, Key_LeftControl, Key_Spacebar, GUI_T(Escape),
+        [FUNCTION] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
+                                    ___, ___, ___, ___, ___, ___, ___,
+                                    ___, ___, ___, ___, ___, ___,
+                                    ___, ___, ___, ___, ___, ___, ___,
+                                    ___, ___, ___, ___,
                                     ___,
 
-                                    Consumer_ScanPreviousTrack, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11,
-                                    Consumer_PlaySlashPause, Consumer_ScanNextTrack, M(MACRO_LEFT_PAREN), M(MACRO_RIGHT_PAREN), Key_Equals, M(MACRO_GREATER_THAN), Key_F12,
+                                    ___, ___, ___, ___, ___, ___, ___,
+                                    ___, ___, ___, ___, ___, ___, ___,
                                     Key_LeftArrow, Key_DownArrow, Key_UpArrow, Key_RightArrow, ___, ___,
-                                    Key_PcApplication, Key_Mute, Consumer_VolumeDecrement, Consumer_VolumeIncrement, ___, Key_Backslash, Key_Delete,
-                                    GUI_T(Tab), Key_RightShift, Key_Enter, Key_RightAlt,
+                                    ___, ___, ___, ___, ___, ___, ___,
+                                    ___, ___, ___, ___,
                                     ___),
 
         [NUMPAD] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
@@ -241,6 +242,13 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState)
 {
   switch (macroIndex)
   {
+  case MACRO_ARROW_FUNCTION:
+    if (keyToggledOn(keyState))
+    {
+      return Macros.type(PSTR("()=>"));
+    }
+    break;
+
   case MACRO_LEFT_PAREN:
     return MACRODOWN(D(LeftShift), T(9), U(LeftShift));
     break;
