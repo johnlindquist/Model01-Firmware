@@ -76,7 +76,9 @@ enum
   MACRO_GREATER_THAN,
   MACRO_ALT_SPACEBAR,
   MACRO_CONTROL_SPACEBAR,
-  MACRO_ARROW_FUNCTION
+  MACRO_ARROW_FUNCTION,
+  MACRO_CONST,
+  MACRO_PLUS
 };
 
 /** The Model 01's key layouts are def)ined as 'keymaps'. By default, there are three
@@ -136,36 +138,36 @@ enum
 const Key keymaps[][ROWS][COLS] PROGMEM = {
 
         [COLEMAK] = KEYMAP_STACKED(Key_Backtick, Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDEffectNext,
-                                   ShiftToLayer(SYMBOLS), Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Tab,
+                                   ShiftToLayer(SYMBOLS), Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Equals,
                                    ShiftToLayer(FUNCTION), Key_A, Key_R, Key_S, Key_T, Key_D,
                                    Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, M(MACRO_CONTROL_SPACEBAR),
                                    Key_LeftAlt, Key_LeftControl, Key_Spacebar, GUI_T(Escape),
                                    ShiftToLayer(SYMBOLS),
 
                                    M(MACRO_ANY), Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
-                                   Key_Enter, Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
+                                   Key_Quote, Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
                                    Key_H, Key_N, Key_E, Key_I, Key_O, Key_Quote,
                                    M(MACRO_ALT_SPACEBAR), Key_K, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Delete,
                                    GUI_T(Tab), Key_RightShift, Key_Enter, Key_RightAlt,
                                    ShiftToLayer(FUNCTION)),
 
         [SYMBOLS] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, ___,
+                                   ___, ___, ___, M(MACRO_PLUS), Key_Minus, ___, ___,
+                                   ___, M(MACRO_CONST), ___, ___, Key_Backtick, Key_Backslash,
                                    ___, ___, ___, ___, ___, ___, ___,
-                                   ___, ___, ___, ___, Key_Backtick, ___,
-                                   Key_Backspace, ___, ___, ___, ___, ___, ___,
                                    Key_LeftAlt, Key_LeftControl, Key_Spacebar, GUI_T(Escape),
                                    ___,
 
                                    ___, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11,
                                    ___, M(MACRO_ARROW_FUNCTION), M(MACRO_LEFT_PAREN), M(MACRO_RIGHT_PAREN), Key_Equals, M(MACRO_GREATER_THAN), Key_F12,
                                    ___, Key_LeftCurlyBracket, Key_RightCurlyBracket, Key_LeftBracket, Key_RightBracket, ___,
-                                   ___, ___, ___, ___, ___, ___, Key_Delete,
+                                   ___, ___, ___, ___, ___, ___, ___,
                                    GUI_T(Tab), Key_RightShift, Key_Enter, Key_RightAlt,
                                    ___),
 
         [FUNCTION] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
                                     ___, ___, ___, ___, ___, ___, ___,
-                                    ___, ___, ___, ___, ___, ___,
+                                    ___, ___, Key_LeftControl, Key_LeftShift, Key_LeftAlt, Key_LeftGui,
                                     ___, ___, ___, ___, ___, ___, ___,
                                     ___, ___, ___, ___,
                                     ___,
@@ -173,7 +175,7 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
                                     ___, ___, ___, ___, ___, ___, ___,
                                     ___, ___, ___, ___, ___, ___, ___,
                                     Key_LeftArrow, Key_DownArrow, Key_UpArrow, Key_RightArrow, ___, ___,
-                                    ___, ___, ___, ___, ___, ___, ___,
+                                    ___, Key_Backspace, ___, ___, Key_Delete, ___, ___,
                                     ___, ___, ___, ___,
                                     ___),
 
@@ -249,10 +251,18 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState)
     }
     break;
 
+  case MACRO_CONST:
+    if (keyToggledOn(keyState))
+    {
+      return Macros.type(PSTR("const "));
+    }
+    break;
   case MACRO_LEFT_PAREN:
     return MACRODOWN(D(LeftShift), T(9), U(LeftShift));
     break;
-
+  case MACRO_PLUS:
+    return MACRODOWN(D(LeftShift), T(Equals), U(LeftShift));
+    break;
   case MACRO_RIGHT_PAREN:
     return MACRODOWN(D(LeftShift), T(0), U(LeftShift));
 
