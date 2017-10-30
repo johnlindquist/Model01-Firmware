@@ -1,3 +1,5 @@
+// https://github.com/keyboardio/Kaleidoscope/blob/master/src/key_defs_keyboard.h
+
 // -*- mode: c++ -*-
 // Copyright 2016 Keyboardio, inc. <jesse@keyboard.io>
 // See "LICENSE" for license details
@@ -81,7 +83,8 @@ enum
   MACRO_ARROW_FUNCTION,
   MACRO_CONST,
   MACRO_PLUS,
-  MACRO_TAG
+  MACRO_TAG,
+  MACRO_EMOJI
 };
 
 /** The Model 01's key layouts are def)ined as 'keymaps'. By default, there are three
@@ -130,7 +133,7 @@ enum
 {
   COLEMAK,
   SYMBOLS,
-  FUNCTION,
+  MOTION,
   NUMPAD,
 }; // layers
 
@@ -144,16 +147,16 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
         [COLEMAK] = KEYMAP_STACKED(Key_Backslash, Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDEffectNext,
                                    Key_Backtick, Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Tab,
                                    Key_Equals, Key_A, Key_R, Key_S, Key_T, Key_D,
-                                   Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, M(MACRO_CONTROL_SPACEBAR),
-                                   Key_LeftAlt, Key_LeftControl, Key_Spacebar, LT(FUNCTION, Escape),
+                                   Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Escape,
+                                   OSM(LeftControl), M(MACRO_CONTROL_SPACEBAR), Key_Spacebar, ShiftToLayer(MOTION),
                                    OSM(LeftGui),
 
                                    M(MACRO_ANY), Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
                                    Key_Quote, Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
                                    Key_H, Key_N, Key_E, Key_I, Key_O, Key_Quote,
                                    M(MACRO_ALT_SPACEBAR), Key_K, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Delete,
-                                   LT(SYMBOLS, Tab), Key_RightShift, Key_Enter, Key_RightAlt,
-                                   OSM(LeftGui)),
+                                   ShiftToLayer(SYMBOLS), OSM(LeftShift), Key_Enter, M(MACRO_EMOJI),
+                                   OSM(LeftAlt)),
 
         [SYMBOLS] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, ___,
                                    ___, ___, ___, M(MACRO_PLUS), Key_Minus, ___, ___,
@@ -169,19 +172,19 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
                                    ___, ___, ___, ___,
                                    ___),
 
-        [FUNCTION] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
-                                    ___, ___, ___, ___, ___, ___, ___,
-                                    ___, ___, Key_LeftControl, Key_LeftShift, Key_LeftAlt, Key_LeftGui,
-                                    ___, ___, ___, ___, ___, ___, ___,
-                                    ___, ___, ___, ___,
-                                    ___,
+        [MOTION] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
+                                  ___, ___, ___, ___, ___, ___, ___,
+                                  ___, ___, Key_LeftControl, Key_LeftShift, Key_LeftAlt, Key_LeftGui,
+                                  ___, ___, ___, ___, ___, ___, ___,
+                                  ___, ___, ___, ___,
+                                  ___,
 
-                                    ___, ___, ___, ___, ___, ___, ___,
-                                    ___, ___, ___, ___, ___, ___, ___,
-                                    Key_LeftArrow, Key_DownArrow, Key_UpArrow, Key_RightArrow, ___, ___,
-                                    ___, Key_Backspace, ___, ___, Key_Delete, ___, ___,
-                                    ___, ___, ___, ___,
-                                    ___),
+                                  ___, ___, ___, ___, ___, ___, ___,
+                                  ___, ___, ___, ___, ___, ___, ___,
+                                  Key_LeftArrow, Key_DownArrow, Key_UpArrow, Key_RightArrow, ___, ___,
+                                  ___, Key_Backspace, ___, ___, Key_Delete, ___, ___,
+                                  ___, ___, ___, ___,
+                                  ___),
 };
 /* Re-enable astyle's indent enforcement */
 // *INDENT-ON*
@@ -277,6 +280,10 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState)
     return MACRODOWN(Tr(LCTRL(Key_Spacebar)));
     break;
 
+  case MACRO_EMOJI:
+    return MACRODOWN(Tr(LCTRL(LGUI(Key_Spacebar))));
+    break;
+
   case MACRO_VERSION_INFO:
     versionInfoMacro(keyState);
     break;
@@ -307,7 +314,7 @@ static kaleidoscope::LEDSolidColor solidViolet(130, 0, 120);
 void setup()
 {
   // First, call Kaleidoscope's internal setup function
-  DualUse.time_out = 100;
+  DualUse.time_out = 77;
   Kaleidoscope.use(&DualUse);
   Kaleidoscope.use(&OneShot, &EscapeOneShot);
   Kaleidoscope.setup();
