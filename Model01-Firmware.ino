@@ -14,6 +14,8 @@
 // The Kaleidoscope core
 #include "Kaleidoscope.h"
 #include "Kaleidoscope-DualUse.h"
+#include <Kaleidoscope-OneShot.h>
+#include <Kaleidoscope-Escape-OneShot.h>
 // Support for keys that move the mouse
 #include "Kaleidoscope-MouseKeys.h"
 
@@ -78,13 +80,15 @@ enum
   MACRO_CONTROL_SPACEBAR,
   MACRO_ARROW_FUNCTION,
   MACRO_CONST,
-  MACRO_PLUS
+  MACRO_PLUS,
+  MACRO_TAG
 };
 
 /** The Model 01's key layouts are def)ined as 'keymaps'. By default, there are three
   * keymaps: The standard QWERTY keymap, the "Function layer" keymap and the "Numpad"
   * keymap.
   *
+  
   * Each keymap is defined as a list using the 'KEYMAP_STACKED' macro, built
   * of first the left hand's layout, followed by the right hand's layout.
   *
@@ -137,32 +141,32 @@ enum
 
 const Key keymaps[][ROWS][COLS] PROGMEM = {
 
-        [COLEMAK] = KEYMAP_STACKED(Key_Backtick, Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDEffectNext,
-                                   ShiftToLayer(SYMBOLS), Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Equals,
-                                   ShiftToLayer(FUNCTION), Key_A, Key_R, Key_S, Key_T, Key_D,
+        [COLEMAK] = KEYMAP_STACKED(Key_Backslash, Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDEffectNext,
+                                   Key_Backtick, Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Tab,
+                                   Key_Equals, Key_A, Key_R, Key_S, Key_T, Key_D,
                                    Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, M(MACRO_CONTROL_SPACEBAR),
-                                   Key_LeftAlt, Key_LeftControl, Key_Spacebar, GUI_T(Escape),
-                                   ShiftToLayer(SYMBOLS),
+                                   Key_LeftAlt, Key_LeftControl, Key_Spacebar, LT(FUNCTION, Escape),
+                                   OSM(LeftGui),
 
                                    M(MACRO_ANY), Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
                                    Key_Quote, Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
                                    Key_H, Key_N, Key_E, Key_I, Key_O, Key_Quote,
                                    M(MACRO_ALT_SPACEBAR), Key_K, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Delete,
-                                   GUI_T(Tab), Key_RightShift, Key_Enter, Key_RightAlt,
-                                   ShiftToLayer(FUNCTION)),
+                                   LT(SYMBOLS, Tab), Key_RightShift, Key_Enter, Key_RightAlt,
+                                   OSM(LeftGui)),
 
         [SYMBOLS] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, ___,
                                    ___, ___, ___, M(MACRO_PLUS), Key_Minus, ___, ___,
                                    ___, M(MACRO_CONST), ___, ___, Key_Backtick, Key_Backslash,
                                    ___, ___, ___, ___, ___, ___, ___,
-                                   Key_LeftAlt, Key_LeftControl, Key_Spacebar, GUI_T(Escape),
+                                   ___, ___, ___, ___,
                                    ___,
 
                                    ___, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11,
                                    ___, M(MACRO_ARROW_FUNCTION), M(MACRO_LEFT_PAREN), M(MACRO_RIGHT_PAREN), Key_Equals, M(MACRO_GREATER_THAN), Key_F12,
-                                   ___, Key_LeftCurlyBracket, Key_RightCurlyBracket, Key_LeftBracket, Key_RightBracket, ___,
+                                   M(MACRO_TAG), Key_LeftCurlyBracket, Key_RightCurlyBracket, Key_LeftBracket, Key_RightBracket, ___,
                                    ___, ___, ___, ___, ___, ___, ___,
-                                   GUI_T(Tab), Key_RightShift, Key_Enter, Key_RightAlt,
+                                   ___, ___, ___, ___,
                                    ___),
 
         [FUNCTION] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
@@ -178,21 +182,7 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
                                     ___, Key_Backspace, ___, ___, Key_Delete, ___, ___,
                                     ___, ___, ___, ___,
                                     ___),
-
-        [NUMPAD] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
-                                  ___, ___, ___, ___, ___, ___, ___,
-                                  ___, ___, ___, ___, ___, ___,
-                                  ___, ___, ___, ___, ___, ___, ___,
-                                  ___, ___, ___, ___,
-                                  ___,
-
-                                  M(MACRO_VERSION_INFO), ___, Key_Keypad7, Key_Keypad8, Key_Keypad9, Key_KeypadSubtract, ___,
-                                  ___, ___, Key_Keypad4, Key_Keypad5, Key_Keypad6, Key_KeypadAdd, ___,
-                                  ___, Key_Keypad1, Key_Keypad2, Key_Keypad3, Key_Equals, Key_Quote,
-                                  ___, ___, Key_Keypad0, Key_KeypadDot, Key_KeypadMultiply, Key_KeypadDivide, Key_Enter,
-                                  ___, ___, ___, ___,
-                                  ___)};
-
+};
 /* Re-enable astyle's indent enforcement */
 // *INDENT-ON*
 
@@ -212,7 +202,7 @@ static void versionInfoMacro(uint8_t keyState)
 
 /** anyKeyMacro is used to provide the functionality of the 'Any' key.
  *
- * When the 'any key' macro is toggled on, a random alphanumeric key is
+ * When the 'any key' macro iiiiis itol)()l)ggled on,i a rhandom alphanumeric key is
  * selected. While the key is held, the function generates a synthetic
  * keypress event repeating that randomly selected key.
  *
@@ -244,6 +234,13 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState)
 {
   switch (macroIndex)
   {
+  case MACRO_TAG:
+    if (keyToggledOn(keyState))
+    {
+      Macros.type(PSTR("<></>"));
+      return MACRODOWN(T(LeftArrow), T(LeftArrow), T(LeftArrow), T(LeftArrow));
+    }
+    break;
   case MACRO_ARROW_FUNCTION:
     if (keyToggledOn(keyState))
     {
@@ -258,26 +255,26 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState)
     }
     break;
   case MACRO_LEFT_PAREN:
-    return MACRODOWN(D(LeftShift), T(9), U(LeftShift));
+    return MACRODOWN(Tr(LSHIFT(Key_9)));
     break;
   case MACRO_PLUS:
-    return MACRODOWN(D(LeftShift), T(Equals), U(LeftShift));
+    return MACRODOWN(Tr(LSHIFT(Key_Equals)));
     break;
   case MACRO_RIGHT_PAREN:
-    return MACRODOWN(D(LeftShift), T(0), U(LeftShift));
+    return MACRODOWN(Tr(LSHIFT(Key_0)));
 
     break;
 
   case MACRO_GREATER_THAN:
-    return MACRODOWN(D(LeftShift), T(Period), U(LeftShift));
+    return MACRODOWN(Tr(LSHIFT(Key_Period)));
     break;
 
   case MACRO_ALT_SPACEBAR:
-    return MACRODOWN(D(LeftAlt), T(Spacebar), U(LeftAlt));
+    return MACRODOWN(Tr(LALT(Key_Spacebar)));
     break;
 
   case MACRO_CONTROL_SPACEBAR:
-    return MACRODOWN(D(LeftControl), T(Spacebar), U(LeftControl));
+    return MACRODOWN(Tr(LCTRL(Key_Spacebar)));
     break;
 
   case MACRO_VERSION_INFO:
@@ -310,7 +307,9 @@ static kaleidoscope::LEDSolidColor solidViolet(130, 0, 120);
 void setup()
 {
   // First, call Kaleidoscope's internal setup function
+  DualUse.time_out = 100;
   Kaleidoscope.use(&DualUse);
+  Kaleidoscope.use(&OneShot, &EscapeOneShot);
   Kaleidoscope.setup();
 
   // Next, tell Kaleidoscope which plugins you want to use.
