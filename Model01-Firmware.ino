@@ -16,8 +16,9 @@
 // The Kaleidoscope core
 #include "Kaleidoscope.h"
 #include "Kaleidoscope-DualUse.h"
-#include <Kaleidoscope-OneShot.h>
-#include <Kaleidoscope-Escape-OneShot.h>
+#include "Kaleidoscope-OneShot.h"
+#include "Kaleidoscope-Escape-OneShot.h"
+#include "Kaleidoscope-ToIfAlone.h"
 // Support for keys that move the mouse
 #include "Kaleidoscope-MouseKeys.h"
 
@@ -138,24 +139,24 @@ enum
 }; // layers
 
 /* This comment temporarily turns off astyle's indent enforcement
- *   so we can make the keymaps actually resemble the physical key layout better
+ *  so we can make the keymaps actually resemble the physical key layout better
  */
 // *INDENT-OFF*
 
 const Key keymaps[][ROWS][COLS] PROGMEM = {
 
-        [COLEMAK] = KEYMAP_STACKED(Key_Backslash, Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDEffectNext,
+        [COLEMAK] = KEYMAP_STACKED(XXX, Key_1, Key_2, Key_3, Key_4, Key_5, Key_Backslash,
                                    Key_Backtick, Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Tab,
                                    Key_Equals, Key_A, Key_R, Key_S, Key_T, Key_D,
                                    Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Escape,
-                                   OSM(LeftControl), M(MACRO_CONTROL_SPACEBAR), Key_Spacebar, ShiftToLayer(MOTION),
+                                   OSM(LeftControl), M(MACRO_CONTROL_SPACEBAR), Key_Spacebar, Key_Escape,
                                    OSM(LeftGui),
 
                                    M(MACRO_ANY), Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
                                    Key_Quote, Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
                                    Key_H, Key_N, Key_E, Key_I, Key_O, Key_Quote,
                                    M(MACRO_ALT_SPACEBAR), Key_K, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Delete,
-                                   ShiftToLayer(SYMBOLS), OSM(LeftShift), Key_Enter, M(MACRO_EMOJI),
+                                   Key_Tab, OSM(LeftShift), Key_Enter, M(MACRO_EMOJI),
                                    OSM(LeftAlt)),
 
         [SYMBOLS] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, ___,
@@ -314,10 +315,17 @@ static kaleidoscope::LEDSolidColor solidViolet(130, 0, 120);
 void setup()
 {
   // First, call Kaleidoscope's internal setup function
-  DualUse.time_out = 77;
+  DualUse.time_out = 100;
+  Kaleidoscope.use(&ToIfAlone);
   Kaleidoscope.use(&DualUse);
   Kaleidoscope.use(&OneShot, &EscapeOneShot);
   Kaleidoscope.setup();
+
+  static kaleidoscope::ToIfAlone::KeyBinding toifalonemap[] = {
+      {Key_Escape, MOTION},
+      {Key_Tab, SYMBOLS},
+      TOIFALONE_MAP_END};
+  ToIfAlone.map = toifalonemap;
 
   // Next, tell Kaleidoscope which plugins you want to use.
   // The order can be important. For example, LED effects are
