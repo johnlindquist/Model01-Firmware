@@ -85,7 +85,9 @@ enum
   MACRO_CONST,
   MACRO_PLUS,
   MACRO_TAG,
-  MACRO_EMOJI
+  MACRO_EMOJI,
+  MACRO_FIND,
+  MACRO_SAVE
 };
 
 /** The Model 01's key layouts are def)ined as 'keymaps'. By default, there are three
@@ -148,15 +150,15 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
         [COLEMAK] = KEYMAP_STACKED(XXX, Key_1, Key_2, Key_3, Key_4, Key_5, Key_Backslash,
                                    Key_Backtick, Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Tab,
                                    Key_Equals, Key_A, Key_R, Key_S, Key_T, Key_D,
-                                   Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Escape,
-                                   OSM(LeftControl), M(MACRO_CONTROL_SPACEBAR), Key_Spacebar, Key_Escape,
+                                   Key_Backspace, Key_Z, Key_X, Key_C, Key_V, Key_B, M(MACRO_CONTROL_SPACEBAR),
+                                   Key_Tab, Key_Spacebar, Key_Escape, OSM(LeftControl),
                                    OSM(LeftGui),
 
                                    M(MACRO_ANY), Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
-                                   Key_Quote, Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
+                                   M(MACRO_SAVE), Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
                                    Key_H, Key_N, Key_E, Key_I, Key_O, Key_Quote,
                                    M(MACRO_ALT_SPACEBAR), Key_K, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Delete,
-                                   Key_Tab, OSM(LeftShift), Key_Enter, M(MACRO_EMOJI),
+                                   M(MACRO_FIND), OSM(LeftShift), Key_Enter, M(MACRO_EMOJI),
                                    OSM(LeftAlt)),
 
         [SYMBOLS] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, ___,
@@ -283,6 +285,14 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState)
 
   case MACRO_EMOJI:
     return MACRODOWN(Tr(LCTRL(LGUI(Key_Spacebar))));
+    break;
+
+  case MACRO_FIND:
+    return MACRODOWN(Tr(LGUI(Key_F)));
+    break;
+
+  case MACRO_SAVE:
+    return MACRODOWN(Tr(LGUI(Key_S)));
     break;
 
   case MACRO_VERSION_INFO:
